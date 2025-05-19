@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anneye Sevgi Tıkı</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(to top, #ffe0e0, #fff5f5);
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      user-select: none;
+      overflow: hidden;
+      position: relative;
+      transition: background 0.5s ease;
+    }
+    .background-active {
+      background-image: url('https://github.com/qokep/mysite/blob/main/indir%20(1).jpeg?raw=true');
+      background-size: cover;
+      background-position: center;
+    }
+    h1 {
+      margin-top: 20px;
+      font-size: 30px;
+      color: #e91e63;
+      text-shadow: 1px 1px 4px #880e4f33;
+    }
+    #score {
+      font-size: 22px;
+      margin: 10px;
+      color: #880e4f;
+    }
+    #click-btn {
+      margin-top: 40px;
+      background: radial-gradient(circle at 30% 30%, #f48fb1, #ec407a);
+      border: none;
+      border-radius: 50%;
+      width: 160px;
+      height: 160px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      font-size: 18px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+    #click-btn:active {
+      transform: scale(0.95);
+    }
+    #market-button {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #8e24aa;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    #market-panel {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px;
+      background: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      z-index: 100;
+    }
+    #market-panel h2 {
+      font-size: 20px;
+      color: #6a1b9a;
+      margin-bottom: 15px;
+    }
+    #market-panel button {
+      padding: 10px;
+      font-size: 16px;
+      background: #ba68c8;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    #market-panel div {
+      font-size: 15px;
+      color: #4a148c;
+      margin-bottom: 10px;
+    }
+    #close-market {
+      background: #e91e63;
+    }
+    .heart {
+      position: absolute;
+      font-size: 24px;
+      color: #e91e63;
+      animation: floatUp 1.2s ease-out forwards;
+      pointer-events: none;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+    }
+    .message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 10px 20px;
+      border-radius: 10px;
+      color: #d81b60;
+      font-weight: bold;
+      animation: fadeOut 3s ease-out forwards;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-50%, -60%); }
+    }
+    #worker-panel {
+      position: fixed;
+      bottom: 50px;
+      right: 10px;
+      background: rgba(255,255,255,0.9);
+      padding: 10px 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      font-size: 14px;
+      color: #4a148c;
+      z-index: 5;
+      min-width: 160px;
+      text-align: left;
+    }
+    #worker-panel h3 {
+      margin: 0 0 5px;
+      font-size: 15px;
+      color: #6a1b9a;
+    }
+    #footer {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      color: #6d4c41;
+      font-size: 14px;
+      z-index: 1;
+    }
+    #creator {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 16px;
+      color: #8e24aa;
+      font-weight: bold;
+      text-shadow: 1px 1px 3px #ffffffaa;
+      opacity: 0.9;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>💖 Anneye Sevgi Tıkı</h1>
+  <div id="score">Sevgi Puanı: 0</div>
+  <button id="click-btn">❤️ Sevgi Gönder</button>
+  <button id="market-button">🛒 Market</button>
+
+  <div id="market-panel">
+    <h2>Sevgi Marketi</h2>
+    <button id="buy-yusuf">👷 Yusuf’u İşe Al (150 Puan)</button>
+    <div id="yusuf-status"></div>
+    <button id="buy-tugba">👩 Tuğba’yı İşe Al (200 Puan)</button>
+    <div id="tugba-status"></div>
+    <button id="buy-rabia">🧑‍🔧 Rabia’yı İşe Al (250 Puan)</button>
+    <div id="rabia-status"></div>
+    <button id="buy-sultan">🧕 Sultan’ı İşe Al (300 Puan)</button>
+    <div id="sultan-status"></div>
+    <button id="buy-double">✨ 2X Tıklama Gücü (150 Puan)</button>
+    <div id="double-status"></div>
+    <button id="buy-background">🖼️ Arka Plan Satın Al (180 Puan)</button>
+    <div id="background-status"></div>
+    <button id="close-market">Kapat ✖️</button>
+  </div>
+
+  <div id="worker-panel">
+    <h3>🔧 Aktif İşçiler</h3>
+    <div id="worker-list"><p>Henüz çalışan yok</p></div>
+  </div>
+
+  <div id="footer">Her dokunuş bir teşekkürdür... 💐</div>
+  <div id="creator">Bu oyunu Yusuf yaptı ❤️</div>
+
+  <audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c26d50fa7d.mp3?filename=pop-94319.mp3" preload="auto"></audio>
+
+  <script>
+    let score = 0;
+    let clickMultiplier = 1;
+    const scoreDisplay = document.getElementById("score");
+    const button = document.getElementById("click-btn");
+    const clickSound = document.getElementById("clickSound");
+
+    const messages = [
+      "İyi ki varsın annecim 💕",
+      "Sen benim her şeyimsin 🌸",
+      "Seni çok seviyorum anne ❤️",
+      "Dünyanın en güzel annesi sensin 👑"
+    ];
+
+    function showMessageRandom() {
+      const msgText = messages[Math.floor(Math.random() * messages.length)];
+      const msg = document.createElement("div");
+      msg.className = "message";
+      msg.textContent = msgText;
+      document.body.appendChild(msg);
+      setTimeout(() => msg.remove(), 3000);
+    }
+
+    function createHeart(x, y) {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.style.left = x - 12 + "px";
+      heart.style.top = y - 12 + "px";
+      heart.textContent = "💖";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1200);
+    }
+
+    function handleClick(e) {
+      score += clickMultiplier;
+      scoreDisplay.textContent = `Sevgi Puanı: ${score}`;
+      let x = e.clientX || e.touches?.[0].clientX;
+      let y = e.clientY || e.touches?.[0].clientY;
+      createHeart(x, y);
+      if (score % 25 === 0) showMessageRandom();
+      clickSound.currentTime = 0;
+      clickSound.play();
+    }
+
+    button.addEventListener("click", handleClick);
+    button.addEventListener("touchstart", e => {
+      e.preventDefault();
+      handleClick(e);
+    });
+
+    const marketButton = document.getElementById("market-button");
+    const marketPanel = document.getElementById("market-panel");
+    const closeMarketBtn = document.getElementById("close-market");
+
+    marketButton.addEventListener("click", () => marketPanel.style.display = "block");
+    closeMarketBtn.addEventListener("click", () => marketPanel.style.display = "none");
+
+    const workerList = document.getElementById("worker-list");
+
+    function addWorkerToPanel(name, interval, amount) {
+      const entry = document.createElement("div");
+      entry.innerHTML = `<strong>${name}</strong><br>⏱️ Her ${interval / 1000} sn'de +${amount} puan`;
+      if (workerList.querySelector("p")) workerList.innerHTML = "";
+      workerList.appendChild(entry);
+    }
+
+    function hireWorker(id, name, cost, interval, amount, statusEl, btnEl) {
+      let hired = false;
+      btnEl.addEventListener("click", () => {
+        if (score >= cost && !hired) {
+          score -= cost;
+          scoreDisplay.textContent = `Sevgi Puanı: ${score}`;
+          hired = true;
+          statusEl.textContent = `${name} çalışıyor!`;
+          btnEl.disabled = true;
+          btnEl.textContent = `✔️ ${name}`;
+          addWorkerToPanel(name, interval, amount);
+          setInterval(() => {
+            score += amount;
+            scoreDisplay.textContent = `Sevgi Puanı: ${score}`;
+          }, interval);
+        }
+      });
+    }
+
+    hireWorker("yusuf", "👷 Yusuf", 150, 5000, 2,
+      document.getElementById("yusuf-status"),
+      document.getElementById("buy-yusuf")
+    );
+
+    hireWorker("tugba", "👩 Tuğba", 200, 3000, 1,
+      document.getElementById("tugba-status"),
+      document.getElementById("buy-tugba")
+    );
+
+    hireWorker("rabia", "🧑‍🔧 Rabia", 250, 4000, 3,
+      document.getElementById("rabia-status"),
+      document.getElementById("buy-rabia")
+    );
+
+    hireWorker("sultan", "🧕 Sultan", 300, 2000, 2,
+      document.getElementById("sultan-status"),
+      document.getElementById("buy-sultan")
+    );
+
+    let doubleBought = false;
+    document.getElementById("buy-double").addEventListener("click", () => {
+      if (score >= 150 && !doubleBought) {
+        score -= 150;
+        clickMultiplier = 2;
+        doubleBought = true;
+        scoreDisplay.textContent = `Sevgi Puanı: ${score}`;
+        document.getElementById("double-status").textContent = "✨ 2X Tıklama aktif!";
+        document.getElementById("buy-double").disabled = true;
+        document.getElementById("buy-double").textContent = "✔️ 2X Aktif!";
+      }
+    });
+
+    let backgroundBought = false;
+    document.getElementById("buy-background").addEventListener("click", () => {
+      if (score >= 180 && !backgroundBought) {
+        score -= 180;
+        scoreDisplay.textContent = `Sevgi Puanı: ${score}`;
+        backgroundBought = true;
+        clickMultiplier++;
+        document.body.classList.add("background-active");
+        document.getElementById("background-status").textContent = "🖼️ Arka plan aktif! Tıklama +1!";
+        document.getElementById("buy-background").disabled = true;
+        document.getElementById("buy-background").textContent = "✔️ Arka Plan Aktif!";
+      }
+    });
+  </script>
+</body>
+</html>
